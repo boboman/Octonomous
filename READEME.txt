@@ -28,6 +28,5 @@ Options:
 -s, --select        Select this file, queueing it for the next print
 -v, --verbose       Enable verbose output.
 -r, --recursive     Recursively watch the directories
--c, --config-file   Specify a config file
 -H, --host=<value>  Specify the address of the server
 -k, --apikey=<value> Specify the apikey for the server\'s rest api
