@@ -137,7 +137,7 @@ def main(argv):
         print '\n\nOctonomous watches directories on the filesystem and uploads new files to an octoprint server.'
         print 'Octonomous takes advantage of the auto-print and auto-select flags.'
         print 'usage: Octonomous [OPTIONS...]  [FILEPATH]'
-        print 'Example: Octonomous /home/boboman/gcode -a -s -v -r'
+        print 'Example: Octonomous -asvr  /home/boboman/gcode '
         print ''
         print 'Options:'
         print '-a, --auto-print    Automatically print uploaded files'
