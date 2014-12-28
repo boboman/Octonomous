@@ -102,7 +102,8 @@ class Watcher:
         self.observer.stop()
 
     def watch_directories(self, directories):
-        event_handler = PrintOnCreateHandler(autoprint=self.autoprint, select=self.select, host=self.host, apikey=self.apikey)
+        event_handler = PrintOnCreateHandler(autoprint=self.autoprint, select=self.select, host=self.host,
+                                             apikey=self.apikey)
         for thePath in directories:
             self.log('Adding watch on ' + thePath)
             self.observer.schedule(event_handler, thePath, recursive=self.recursive)
@@ -132,7 +133,7 @@ class Watcher:
 def main(argv):
     try:
         opts, args = getopt.getopt(argv, "asvrH:k:",
-                                   ["auto-print", "select", "verbose", "recursive", "host=", "apikey="])
+                                   ["auto-print", "select", "verbose", "recursive", "host=", "apikey=", "fart"])
     except getopt.GetoptError:
         print '\n\nOctonomous watches directories on the filesystem and uploads new files to an octoprint server.'
         print 'Octonomous takes advantage of the auto-print and auto-select flags.'
@@ -169,6 +170,9 @@ def main(argv):
             host = arg
         if opt in ('-k', '--apikey'):
             apikey = arg
+        if opt == '--fart':
+            fart()
+            sys.exit(2)
 
     directories = args
     print 'args= ' + str(args)
@@ -176,6 +180,37 @@ def main(argv):
     watcher = Watcher(autoprint=autoprint, select=select, directories=directories, verbose=verbose, recursive=recursive,
                       apikey=apikey, host=host)
     watcher.start()
+
+
+def fart():
+    print '                                         ___    ,\'""""\'.'
+    print '                                     ,"""   """"\'      `.'
+    print '                                    ,\'        _.         `._'
+    print '                                   ,\'       ,\'              `"""\'.'
+    print '                                  ,\'    .-""`.    ,-\'            `.'
+    print '                                 ,\'    (        ,\'                :'
+    print '                               ,\'     ,\'           __,            `.'
+    print '                         ,""""\'     .\' ;-.    ,  ,\'  \             `"""".'
+    print '                       ,\'           `-(   `._(_,\'     )_                `.'
+    print '                      ,\'         ,---. \ @ ;   \ @ _,\'                   `.'
+    print '                 ,-""\'         ,\'      ,--\'-    `;\'                       `.'
+    print '                ,\'            ,\'      (      `. ,\'                          `.'
+    print '                ;            ,\'        \    _,\',\'                            `.'
+    print '               ,\'            ;          `--\'  ,\'                              `.'
+    print '              ,\'             ;          __    (                    ,           `.'
+    print '              ;              `____...  `78b   `.                  ,\'           ,\''
+    print '              ;    ...----\'\'\'\' )  _.-  .d8P    `.                ,\'    ,\'    ,\''
+    print ' _....----\'\'\' \'.        _..--"_.-:.-\' .\'        `.             ,\'\'.   ,\' `--\''
+    print '               `" mGk "" _.-\'\' .-\'`-.:..___...--\' `-._      ,-"\'   `-\''
+    print '         _.--\'       _.-\'    .\'   .\' .\'               `"""""'
+    print '   __.-\'\'        _.-\'     .-\'   .\'  /'
+    print '  \'          _.-\' .-\'  .-\'        .\''
+    print '         _.-\'  .-\'  .-\' .\'  .\'   /'
+    print '     _.-\'      .-\'   .-\'  .\'   .\''
+    print ' _.-\'       .-\'    .\'   .\'    /'
+    print '        _.-\'    .-\'   .\'    .\''
+    print '     .-\'            .\''
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
