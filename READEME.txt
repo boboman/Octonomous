@@ -22,11 +22,14 @@ through which recipients can access the Corresponding Source.
 Octonomous watches directories on the filesystem and uploads new files to an octoprint server.
 Octonomous takes advantage of the auto-print and auto-select flags.
 usage: Octonomous [OPTIONS...]  [FILEPATH]
-Example: Octonomous /home/gspencer/gcode/watch -h 10.0.0.10 -apikey=asdfsd -rs
+Example: Octonomous -asvr  /home/boboman/gcode
+Example: Octonomous -c custom-config.cfg
+
 Options:
 -a, --auto-print    Automatically print uploaded files
 -s, --select        Select this file, queueing it for the next print
 -v, --verbose       Enable verbose output.
 -r, --recursive     Recursively watch the directories
+-c, --config-file   Specify a config file
 -H, --host=<value>  Specify the address of the server
--k, --apikey=<value> Specify the apikey for the server\'s rest api
+-k, --apikey=<value> Specify the apikey for the server's rest api
