@@ -139,7 +139,7 @@ def main(argv):
     except getopt.GetoptError:
         print '\n\nOctonomous watches directories on the filesystem and uploads new files to an octoprint server.'
         print 'Octonomous takes advantage of the auto-print and auto-select flags.'
-        print 'usage: Octonomous [OPTIONS...]  [FILEPATH]'
+        print 'usage: Octonomous [OPTIONS...]  [FILEPATH1 FILEPATH2 ... FILEPATHN]'
         print 'Example: Octonomous -asvr  /home/boboman/gcode '
         print 'Example: Octonomous -c custom-config.cfg'
         print ''

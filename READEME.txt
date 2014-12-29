@@ -21,7 +21,7 @@ through which recipients can access the Corresponding Source.
 
 Octonomous watches directories on the filesystem and uploads new files to an octoprint server.
 Octonomous takes advantage of the auto-print and auto-select flags.
-usage: Octonomous [OPTIONS...]  [FILEPATH]
+usage: Octonomous [OPTIONS...]  [FILEPATH1 FILEPATH2 ... FILEPATHN]
 Example: Octonomous -asvr  /home/boboman/gcode
 Example: Octonomous -c custom-config.cfg
 
