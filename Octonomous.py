@@ -4,6 +4,7 @@ import getopt
 import time
 import os
 import json
+import ConfigParser
 
 import requests
 
@@ -53,11 +54,11 @@ class OctoPrint:
 
 
 class PrintOnCreateHandler(FileSystemEventHandler):
-    def __init__(self, autoprint=False, select=False, host='127.0.0.1', apikey=''):
-        self.autoprint = autoprint
+    def __init__(self, autoprint=False, select=False, host='127.0.0.1', apikey='asdf'):
         self.select = select
         self.host = host
         self.apikey = apikey
+        self.autoprint = autoprint
 
     def on_created(self, event):
         # print 'Created File: ' + event.src_path
@@ -104,9 +105,9 @@ class Watcher:
     def watch_directories(self, directories):
         event_handler = PrintOnCreateHandler(autoprint=self.autoprint, select=self.select, host=self.host,
                                              apikey=self.apikey)
-        for thePath in directories:
-            self.log('Adding watch on ' + thePath)
-            self.observer.schedule(event_handler, thePath, recursive=self.recursive)
+        for the_path in directories:
+            self.log('Adding watch on ' + the_path.strip())
+            self.observer.schedule(event_handler, the_path.strip(), recursive=bool(self.recursive))
 
         self.log('Attempting to start the watch thread.')
 
@@ -132,13 +133,15 @@ class Watcher:
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "asvrH:k:",
-                                   ["auto-print", "select", "verbose", "recursive", "host=", "apikey=", "fart"])
+        opts, args = getopt.getopt(argv, "asvrH:k:c:",
+                                   ["auto-print", "select", "verbose", "recursive", "host=", "apikey=",
+                                    "config=" "fart"])
     except getopt.GetoptError:
         print '\n\nOctonomous watches directories on the filesystem and uploads new files to an octoprint server.'
         print 'Octonomous takes advantage of the auto-print and auto-select flags.'
         print 'usage: Octonomous [OPTIONS...]  [FILEPATH]'
         print 'Example: Octonomous -asvr  /home/boboman/gcode '
+        print 'Example: Octonomous -c custom-config.cfg'
         print ''
         print 'Options:'
         print '-a, --auto-print    Automatically print uploaded files'
@@ -156,25 +159,41 @@ def main(argv):
     recursive = False
     host = None
     apikey = None
-    for opt, arg in opts:
-        if opt in ('-a', '--auto-print'):
-            autoprint = True
-            # possibility of a confirm prompt as this could be dangerous(?)
-        if opt in ('-s', '--select'):
-            select = True
-        if opt in ('-v', '--verbose'):
-            verbose = True
-        if opt in ('-r', '--recursive'):
-            recursive = True
-        if opt in ('-H', '--host'):
-            host = arg
-        if opt in ('-k', '--apikey'):
-            apikey = arg
-        if opt == '--fart':
-            fart()
-            sys.exit(2)
-
     directories = args
+
+    for opt, arg in opts:
+        if opt in ('-c', 'config='):
+            print 'config arg= ' + arg
+            config = ConfigParser.RawConfigParser()
+            config.read(arg)
+
+            host = config.get('octonomous', 'host')
+            apikey = config.get('octonomous', 'apikey')
+
+            select = 'true' == config.get('octonomous', 'select')
+            autoprint = 'true' == config.get('octonomous', 'autoprint').lower()
+            recursive = 'true' == config.get('octonomous', 'recursive').lower()
+            verbose = 'true' == config.get('octonomous', 'verbose').lower()
+
+            directories = [path for key, path in config.items("directories")]
+
+        else:
+            if opt in ('-a', '--auto-print'):
+                autoprint = True
+                # possibility of a confirm prompt as this could be dangerous(?)
+            if opt in ('-s', '--select', '/s'):
+                select = True
+            if opt in ('-v', '--verbose', '/v'):
+                verbose = True
+            if opt in ('-r', '--recursive', '/r'):
+                recursive = True
+            if opt in ('-H', '--host', '/H'):
+                host = arg
+            if opt in ('-k', '--apikey', '/k'):
+                apikey = arg
+            if opt == '--fart':
+                fart()
+
     print 'args= ' + str(args)
 
     watcher = Watcher(autoprint=autoprint, select=select, directories=directories, verbose=verbose, recursive=recursive,
